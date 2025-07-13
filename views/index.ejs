@@ -1,0 +1,68 @@
+<%- include('header') %>
+
+<div class="container">
+    <section class="task-input-section">
+        <h2>Add New Task</h2>
+        <form id="add-task-form" action="/add" method="POST">
+            <input type="text" id="new-task-input" name="task" placeholder="Enter a new task..." required>
+            <select name="priority">
+                <option value="high">High</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <button type="submit" class="add-btn">Add Task</button>
+        </form>
+    </section>
+
+    <section class="filter-section">
+        <h2>Filter Tasks</h2>
+        <form action="/filter" method="GET">
+            <label for="priority-filter">Filter by Priority:</label>
+            <select id="priority-filter" name="priority" onchange="this.form.submit()">
+                <option value="all" <%= filter === 'all' ? 'selected' : '' %>>All</option>
+                <option value="high" <%= filter === 'high' ? 'selected' : '' %>>High</option>
+                <option value="medium" <%= filter === 'medium' ? 'selected' : '' %>>Medium</option>
+                <option value="low" <%= filter === 'low' ? 'selected' : '' %>>Low</option>
+            </select>
+        </form>
+    </section>
+
+    <section class="todo-list-section">
+        <h2>Your Tasks</h2>
+        <% if (todos.length === 0) { %>
+            <p class="no-tasks-message">No tasks yet. Add a new one above!</p>
+        <% } else { %>
+            <ul class="todo-list">
+                <% todos.forEach(todo => { %>
+                    <li class="todo-item" data-id="<%= todo.id %>">
+                        <div class="todo-view">
+                            <span class="todo-task <%= todo.priority %>"><%= todo.task %></span>
+                            <span class="todo-priority">(<%= todo.priority %>)</span>
+                            <div class="actions">
+                                <button class="edit-btn">Edit</button>
+                                <form action="/delete/<%= todo.id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="todo-edit-form" style="display:none;">
+                            <form action="/edit/<%= todo.id %>" method="POST">
+                                <input type="text" name="task" value="<%= todo.task %>" required>
+                                <select name="priority">
+                                    <option value="high" <%= todo.priority === 'high' ? 'selected' : '' %>>High</option>
+                                    <option value="medium" <%= todo.priority === 'medium' ? 'selected' : '' %>>Medium</option>
+                                    <option value="low" <%= todo.priority === 'low' ? 'selected' : '' %>>Low</option>
+                                </select>
+                                <button type="submit" class="save-btn">Save</button>
+                                <button type="button" class="cancel-edit-btn">Cancel</button>
+                            </form>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </section>
+</div>
+
+<%- include('footer') %>

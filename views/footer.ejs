@@ -1,0 +1,49 @@
+</main>
+    <footer>
+        <p>&copy; <%= new Date().getFullYear() %> Todo List App. All rights reserved.</p>
+    </footer>
+    <script>
+        // Client-side JavaScript for alerts and potentially showing edit forms
+        document.addEventListener('DOMContentLoaded', () => {
+            const addTaskForm = document.getElementById('add-task-form');
+            if (addTaskForm) {
+                addTaskForm.addEventListener('submit', (event) => {
+                    const taskInput = document.getElementById('new-task-input');
+                    if (taskInput.value.trim() === '') {
+                        alert('Task input cannot be empty!');
+                        event.preventDefault(); // Prevent form submission
+                    }
+                });
+            }
+
+            // Handle edit buttons - show/hide edit forms
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const todoItem = event.target.closest('.todo-item');
+                    const viewSection = todoItem.querySelector('.todo-view');
+                    const editSection = todoItem.querySelector('.todo-edit-form');
+
+                    if (viewSection && editSection) {
+                        viewSection.style.display = 'none';
+                        editSection.style.display = 'flex'; // Use flex for layout
+                    }
+                });
+            });
+
+            // Handle cancel edit buttons
+            document.querySelectorAll('.cancel-edit-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const todoItem = event.target.closest('.todo-item');
+                    const viewSection = todoItem.querySelector('.todo-view');
+                    const editSection = todoItem.querySelector('.todo-edit-form');
+
+                    if (viewSection && editSection) {
+                        viewSection.style.display = 'flex'; // Show original view
+                        editSection.style.display = 'none'; // Hide edit form
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
